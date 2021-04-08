@@ -1,7 +1,8 @@
-var express = require('express'),
-    http = require('http'),
-    path = require('path')
-    io = require('socket.io');
+var express = require('express');
+var http = require('http');
+var path = require('path')
+var io = require('socket.io');
+const { isObject } = require('util');
 
 var app = express();
 
@@ -14,7 +15,7 @@ var server = http.createServer(app).listen(app.get('port'), function(){
 });
 
 // Set up socket.io
-var io = require('socket.io')(7600);
+var io = require('socket.io')(server);
 
 // Handle socket traffic
 io.sockets.on('connection', function (socket) {
@@ -26,9 +27,7 @@ io.sockets.on('connection', function (socket) {
     // Relay chat data to all clients
     socket.on('chat', function(data) {
         console.log(data)
-
             var nickname = socket.nickname;
-
             var payload = {
                 message: data.message,
                 nick: nickname
